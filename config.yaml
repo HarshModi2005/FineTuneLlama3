@@ -1,0 +1,57 @@
+# Dan Brown Fine-Tuning Configuration
+model:
+  name: "unsloth/llama-3-8b-bnb-4bit"
+  max_seq_length: 2048
+  load_in_4bit: true
+  dtype: null  # auto-detection
+
+# LoRA Configuration
+lora:
+  r: 16
+  alpha: 16
+  dropout: 0.0
+  bias: "none"
+  target_modules:
+    - "q_proj"
+    - "k_proj" 
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  use_rslora: false
+
+# Training Configuration
+training:
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  warmup_steps: 5
+  max_steps: 100
+  learning_rate: 2e-4
+  weight_decay: 0.01
+  lr_scheduler_type: "linear"
+  optim: "adamw_8bit"
+  logging_steps: 1
+  seed: 3407
+  use_gradient_checkpointing: "unsloth"
+  
+# Data Configuration
+data:
+  train_file: "data/data.pkl"
+  validation_split: 0.1
+  
+# Generation Configuration
+generation:
+  max_new_tokens: 4096
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  repetition_penalty: 1.1
+  do_sample: true
+
+# Output Configuration
+output:
+  model_save_path: "models/dan_brown_llama3"
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs"
+  examples_dir: "examples" 
